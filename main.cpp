@@ -209,7 +209,7 @@ void Menu( int value )
 }
 
 int main( int argc, char * argv[] )
-{
+{ // wyszukaæ Ÿród³o bugów
     glutInit( & argc, argv );
     glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGB );
     glutInitWindowSize( 400, 400 );
