@@ -3,8 +3,11 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
+#include <time.h>
 #include <iostream>
+#include <windows.h>
 
 #define ANIM_FPS	40
 
@@ -23,6 +26,9 @@ int Aspect = FULL_WINDOW;
 GLdouble snakex = 0.5;
 GLdouble snakez = -0.5;
 GLint snakeDirection = 3;
+
+GLdouble ballx = 1.0;
+GLdouble ballz = -1.0;
 
 GLboolean gameover = false;
 
@@ -57,6 +63,7 @@ void setupScene(void) {
 
 void Display()
 {
+    srand(time(0));
     glClearColor( 0, 0, 0, 0 );
     glClear( GL_COLOR_BUFFER_BIT );
     glMatrixMode( GL_MODELVIEW );
@@ -70,9 +77,7 @@ void Display()
         glVertex3f( 3.0, 0.0, -2.0 );
         glVertex3f( 3.0, 0.0, 0.0 );
     glEnd();
-    glColor3f(1,0,0);
-    glTranslated(1,0,-1);
-    glutSolidSphere(0.05, 10, 10);
+
     switch(snakeDirection){
     case 0:{
         snakez-=0.1;
@@ -91,40 +96,35 @@ void Display()
         break;
     }
     }
-    if((snakex <= -4.1 || snakex >= 2.1) || (snakez <= -1 || snakez >= 0.9)){
+    if((snakex <= -3.1 || snakex >= 3.1) || (snakez <= -2.1 || snakez >= -0.1)){
+        MessageBox(NULL,"Game Over","Game Over",0);
         Menu(EXIT);
     }
-    glColor3f(0,0,1);
-    glTranslated(snakex,0,snakez);
-    glutSolidCube(0.1);
+    if((snakex == ballx) && (snakez == ballz)){
+        ballx = (-31 + rand()%60)*0.1;
+        ballz = (-21 + rand()%20)*0.1;
+    }
+    glPushMatrix();
+        glColor3f(1,0,0);
+        glTranslated(ballx,0,ballz);
+        glutSolidSphere(0.05, 10, 10);
+    glPopMatrix();
+    glPushMatrix();
+        glColor3f(0,0,1);
+        glTranslated(snakex,0,snakez);
+        glutSolidCube(0.1);
+    glPopMatrix();
     //glDisable( GL_LIGHTING );
     //glDisable( GL_COLOR_MATERIAL );
     glFlush();
     glutSwapBuffers();
 }
 
-/*void ZegarFun(int val) {
-	switch(snakeDirection){
-    case 0:{
-        snakez-=0.1;
-        break;
-    }
-    case 1:{
-        snakex+=0.1;
-        break;
-    }
-    case 2:{
-        snakez+=0.1;
-        break;
-    }
-    case 3:{
-        snakex-=0.1;
-        break;
-    }
+void ZegarFun(int val) {
     glutPostRedisplay();
-	glutTimerFunc(1000/ANIM_FPS, ZegarFun, 0);
+	glutTimerFunc(5000/ANIM_FPS, ZegarFun, 0);
 }
-}*/
+
 
 void Reshape( int width, int height )
 {
@@ -209,7 +209,7 @@ void Menu( int value )
 }
 
 int main( int argc, char * argv[] )
-{ // wyszukaæ Ÿród³o bugów
+{ // wyszukaæ zrodlo bugów
     glutInit( & argc, argv );
     glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGB );
     glutInitWindowSize( 400, 400 );
@@ -219,7 +219,7 @@ int main( int argc, char * argv[] )
     glutKeyboardFunc(Keyboard);
     glutSpecialFunc(SpecialKeys);
     glutCreateMenu( Menu );
-    //glutTimerFunc(1000/ANIM_FPS, ZegarFun, 0);
+    glutTimerFunc(1000/ANIM_FPS, ZegarFun, 0);
     //setupScene();
     glutMainLoop();
     return 0;
