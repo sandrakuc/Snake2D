@@ -7,6 +7,7 @@
 #include <string.h>
 #include <time.h>
 #include <iostream>
+#include <fstream>
 #include <windows.h>
 
 #define ANIM_FPS	40
@@ -23,19 +24,21 @@ enum
 
 int Aspect = FULL_WINDOW;
 
+ofstream ofile;
+ifstream ifile;
+
+GLdouble foodx = 1.0;
+GLdouble foodz = -1.0;
+
 GLdouble snakex = 0.5;
 GLdouble snakez = -0.5;
 GLint snakeDirection = 3;
-
-GLdouble ballx = 1.0;
-GLdouble ballz = -1.0;
-
-GLboolean gameover = false;
 
 GLdouble eyex = 0;
 GLdouble eyey = 3.2;
 GLdouble eyez = 0.7;
 
+GLint points = 0;
 
 GLdouble centerx = 0;
 GLdouble centery = 0;
@@ -63,22 +66,28 @@ void setupScene(void) {
 
 void Display()
 {
-    srand(time(0));
+    srand(time(NULL));
     glClearColor( 0, 0, 0, 0 );
     glClear( GL_COLOR_BUFFER_BIT );
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
     gluLookAt( eyex, eyey, eyez, centerx, centery, centerz, 0, 1, 0 );
    // glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
-    glColor3f( 0.0, 1.0, 0.0 );
-    glBegin( GL_POLYGON);
-        glVertex3f( -3.0, 0.0, 0.0 );
-        glVertex3f( -3.0, 0.0, -2.0 );
-        glVertex3f( 3.0, 0.0, -2.0 );
-        glVertex3f( 3.0, 0.0, 0.0 );
-    glEnd();
-
-    switch(snakeDirection){
+    glPushMatrix();
+        glColor3f( 0.0, 1.0, 0.0 );
+        glBegin( GL_POLYGON);
+            glVertex3f( -3.0, 0.0, 0.0 );
+            glVertex3f( -3.0, 0.0, -2.0 );
+            glVertex3f( 3.0, 0.0, -2.0 );
+            glVertex3f( 3.0, 0.0, 0.0 );
+        glEnd();
+    glPopMatrix();
+    if(snakex == foodx && snakez == foodz){
+        points++;
+        foodx = (-31 + rand()%60)*0.1;
+        foodz = (-21 + rand()%20)*0.1;
+    }
+   switch(snakeDirection){
     case 0:{
         snakez-=0.1;
         break;
@@ -96,24 +105,83 @@ void Display()
         break;
     }
     }
-    if((snakex <= -3.1 || snakex >= 3.1) || (snakez <= -2.1 || snakez >= -0.1)){
-        MessageBox(NULL,"Game Over","Game Over",0);
+    if((snakex <= -3.1 || snakex >= 3) || (snakez <= -2 || snakez >= 0)){
+        ofile.open("score.dat",std::ios::trunc);
+        ofile<<points<<endl;
+        ofile.close();
+        ifile.open("score.dat",std::ios::in);
+        char a[4];
+        ifile>>a;
+        std::cout<<a;
+        char tekst[50]= "Zdobyte punkty: ";
+        strcat(tekst,a);
+        MessageBox(NULL,tekst,"Game Over",0);
         Menu(EXIT);
     }
-    if((snakex == ballx) && (snakez == ballz)){
-        ballx = (-31 + rand()%60)*0.1;
-        ballz = (-21 + rand()%20)*0.1;
-    }
-    glPushMatrix();
         glColor3f(1,0,0);
-        glTranslated(ballx,0,ballz);
-        glutSolidSphere(0.05, 10, 10);
-    glPopMatrix();
-    glPushMatrix();
+        glBegin(GL_POLYGON);
+            glVertex3f( foodx, 0.0, foodz );
+            glVertex3f( foodx, 0.0, foodz-0.1 );
+            glVertex3f( foodx+0.1, 0.0, foodz-0.1);
+            glVertex3f( foodx+0.1, 0.0, foodz);
+
+            glVertex3f( foodx, 0.1, foodz );
+            glVertex3f( foodx, 0.1, foodz-0.1 );
+            glVertex3f( foodx+0.1, 0.1, foodz-0.1);
+            glVertex3f( foodx+0.1, 0.1, foodz);
+
+            glVertex3f( foodx, 0.0, foodz );
+            glVertex3f( foodx, 0.0, foodz-0.1 );
+            glVertex3f( foodx, 0.1, foodz -0.1);
+            glVertex3f( foodx, 0.1, foodz);
+
+            glVertex3f( foodx, 0.0, foodz );
+            glVertex3f( foodx, 0.1, foodz );
+            glVertex3f( foodx+0.1, 0.1, foodz);
+            glVertex3f( foodx+0.1, 0.0, foodz);
+
+            glVertex3f( foodx+0.1, 0.1, foodz );
+            glVertex3f( foodx+0.1, 0.1, foodz-0.1 );
+            glVertex3f( foodx+0.1, 0.0, foodz-0.1);
+            glVertex3f( foodx+0.1, 0.0, foodz);
+
+            glVertex3f( foodx, 0.1, foodz-0.1 );
+            glVertex3f( foodx, 0.1, foodz-0.1 );
+            glVertex3f( foodx+0.1, 0.0, foodz-0.1);
+            glVertex3f( foodx+0.1, 0.0, foodz-0.1);
+        glEnd();
         glColor3f(0,0,1);
-        glTranslated(snakex,0,snakez);
-        glutSolidCube(0.1);
-    glPopMatrix();
+        glBegin(GL_POLYGON);
+            glVertex3f( snakex, 0.0, snakez );
+            glVertex3f( snakex, 0.0, snakez-0.1 );
+            glVertex3f( snakex+0.1, 0.0, snakez-0.1);
+            glVertex3f( snakex+0.1, 0.0, snakez);
+
+            glVertex3f( snakex, 0.1, snakez );
+            glVertex3f( snakex, 0.1, snakez-0.1 );
+            glVertex3f( snakex+0.1, 0.1, snakez-0.1);
+            glVertex3f( snakex+0.1, 0.1, snakez);
+
+            glVertex3f( snakex, 0.0, snakez );
+            glVertex3f( snakex, 0.0, snakez-0.1 );
+            glVertex3f( snakex, 0.1, snakez -0.1);
+            glVertex3f( snakex, 0.1, snakez);
+
+            glVertex3f( snakex, 0.0, snakez );
+            glVertex3f( snakex, 0.1, snakez );
+            glVertex3f( snakex+0.1, 0.1, snakez);
+            glVertex3f( snakex+0.1, 0.0, snakez);
+
+            glVertex3f( snakex+0.1, 0.1, snakez );
+            glVertex3f( snakex+0.1, 0.1, snakez-0.1 );
+            glVertex3f( snakex+0.1, 0.0, snakez-0.1);
+            glVertex3f( snakex+0.1, 0.0, snakez);
+
+            glVertex3f( snakex, 0.1, snakez-0.1 );
+            glVertex3f( snakex, 0.1, snakez-0.1 );
+            glVertex3f( snakex+0.1, 0.0, snakez-0.1);
+            glVertex3f( snakex+0.1, 0.0, snakez-0.1);
+        glEnd();
     //glDisable( GL_LIGHTING );
     //glDisable( GL_COLOR_MATERIAL );
     glFlush();
@@ -209,7 +277,7 @@ void Menu( int value )
 }
 
 int main( int argc, char * argv[] )
-{ // wyszukaæ zrodlo bugów
+{ // wyszukaæ zrodlo bugow
     glutInit( & argc, argv );
     glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGB );
     glutInitWindowSize( 400, 400 );
