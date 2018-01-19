@@ -1,3 +1,11 @@
+/* Uproszczony Snake,
+Lista zadan:
+*naprawic swiatlo
+*naprawic zbieranie zarcia
+*sprawic, aby ogon rosl
+*kolizja lba z ogone, */
+
+
 #define GLUT_DISABLE_ATEXIT_HACK
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -10,7 +18,7 @@
 #include <fstream>
 #include <windows.h>
 
-#define ANIM_FPS	40
+#define ANIM_FPS	40 //liczba klatek
 
 using namespace std;
 
@@ -19,35 +27,35 @@ enum
     FULL_WINDOW,
     ASPECT_1_1,
     EXIT
-};
+}; // do menu
 
 
 int Aspect = FULL_WINDOW;
 
 ofstream ofile;
-ifstream ifile;
+ifstream ifile; // pliki do zapisywania wyniku gry
 
 GLdouble foodx = 1.0;
-GLdouble foodz = -1.0;
+GLdouble foodz = -1.0; // wspolrzedne zarelka
 
 GLdouble snakex = 0.5;
-GLdouble snakez = -0.5;
-GLint snakeDirection = 3;
+GLdouble snakez = -0.5; // wspolrzedne lba
+GLint snakeDirection = 3; // kierunek poruszania sie Snake'a
 
 GLdouble eyex = 0;
 GLdouble eyey = 3.2;
-GLdouble eyez = 0.7;
+GLdouble eyez = 0.7; // polozenie obserwatora
 
-GLint points = 0;
+GLint points = 0; // punkty
 
 GLdouble centerx = 0;
 GLdouble centery = 0;
-GLdouble centerz = -10;
+GLdouble centerz = -10; // punkt, w kierunku ktorego obserwator jest zwrocony
 
 GLfloat lightAmb[] = {0, 0, 0, 1};
 GLfloat lightDif[] = {1, 1, 1, 1};
 GLfloat lightPos[] = {0, 0, 1, 0};
-GLfloat lightSpec[] = {1, 1, 1, 1};
+GLfloat lightSpec[] = {1, 1, 1, 1}; // macierze dla swiatla
 
 void Menu( int value );
 
@@ -62,31 +70,27 @@ void setupScene(void) {
 	glMateriali(GL_FRONT, GL_SHININESS, 100);
 	glEnable(GL_COLOR_MATERIAL);
 	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
-}
+} // funkcja odpowiedzialna za ustawienie swiatla
 
-void Display()
+void Display() //wyswietlenie sceny
 {
-    srand(time(NULL));
-    glClearColor( 0, 0, 0, 0 );
-    glClear( GL_COLOR_BUFFER_BIT );
+    srand(time(NULL)); //losowanie polozenia zarcia
+    glClearColor( 0, 0, 0, 1 ); //kolor tla
+    glClear( GL_COLOR_BUFFER_BIT ); //czyszczenie bufora
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
-    gluLookAt( eyex, eyey, eyez, centerx, centery, centerz, 0, 1, 0 );
+    gluLookAt( eyex, eyey, eyez, centerx, centery, centerz, 0, 1, 0 ); //widok
    // glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
-    glPushMatrix();
-        glColor3f( 0.0, 1.0, 0.0 );
-        glBegin( GL_POLYGON);
+    glPushMatrix(); //macierz
+        glColor3f( 0.0, 1.0, 0.0 ); //zielony kolor
+        glBegin( GL_POLYGON); //kwadrat
             glVertex3f( -3.0, 0.0, 0.0 );
             glVertex3f( -3.0, 0.0, -2.0 );
             glVertex3f( 3.0, 0.0, -2.0 );
-            glVertex3f( 3.0, 0.0, 0.0 );
-        glEnd();
-    glPopMatrix();
-    if(snakex == foodx && snakez == foodz){
-        points++;
-        foodx = (-31 + rand()%60)*0.1;
-        foodz = (-21 + rand()%20)*0.1;
-    }
+            glVertex3f( 3.0, 0.0, 0.0 ); //wierzcholki
+        glEnd(); //koniec
+    glPopMatrix(); //koniec macierz
+
    switch(snakeDirection){
     case 0:{
         snakez-=0.1;
@@ -104,7 +108,14 @@ void Display()
         snakex-=0.1;
         break;
     }
+    } //sterowanie poruszaniem sie Snake'a - kierunki
+
+    if(snakex == foodx && snakez == foodz){ //kolizja z jedzeniem. UWAGA!!! Tu jest bug!!!
+        points++;
+        foodx = (-31 + rand()%60)*0.1;
+        foodz = (-21 + rand()%20)*0.1;
     }
+
     if((snakex <= -3.1 || snakex >= 3) || (snakez <= -2 || snakez >= 0)){
         ofile.open("score.dat",std::ios::trunc);
         ofile<<points<<endl;
@@ -117,7 +128,9 @@ void Display()
         strcat(tekst,a);
         MessageBox(NULL,tekst,"Game Over",0);
         Menu(EXIT);
-    }
+    } //kolizja z krawedziami, zapisywanie wynikow do pliku, gameover
+
+    glPushMatrix();
         glColor3f(1,0,0);
         glBegin(GL_POLYGON);
             glVertex3f( foodx, 0.0, foodz );
@@ -150,6 +163,10 @@ void Display()
             glVertex3f( foodx+0.1, 0.0, foodz-0.1);
             glVertex3f( foodx+0.1, 0.0, foodz-0.1);
         glEnd();
+    glPopMatrix(); //narysowanie zarelka
+
+
+    glPushMatrix();
         glColor3f(0,0,1);
         glBegin(GL_POLYGON);
             glVertex3f( snakex, 0.0, snakez );
@@ -182,13 +199,15 @@ void Display()
             glVertex3f( snakex+0.1, 0.0, snakez-0.1);
             glVertex3f( snakex+0.1, 0.0, snakez-0.1);
         glEnd();
+    glPopMatrix(); //narysowanie glowy weza
+
     //glDisable( GL_LIGHTING );
     //glDisable( GL_COLOR_MATERIAL );
     glFlush();
     glutSwapBuffers();
 }
 
-void ZegarFun(int val) {
+void ZegarFun(int val) { //funkcja zegarowa dla animacji
     glutPostRedisplay();
 	glutTimerFunc(5000/ANIM_FPS, ZegarFun, 0);
 }
@@ -211,7 +230,7 @@ void Reshape( int width, int height )
     else
          glFrustum( - 2.0, 2.0, - 2.0, 2.0, 1.0, 5.0 );
     Display();
-}
+} //funkcja do przeksztalcania
 
 
 void Keyboard( unsigned char key, int x, int y )
@@ -230,7 +249,7 @@ void Keyboard( unsigned char key, int x, int y )
         snakeDirection = 3;
     Reshape( glutGet( GLUT_WINDOW_WIDTH ), glutGet( GLUT_WINDOW_HEIGHT ) );
 }
-
+// obsluha klawiatury
 
 void SpecialKeys( int key, int x, int y )
 {
@@ -255,7 +274,7 @@ void SpecialKeys( int key, int x, int y )
     }
 
     Reshape( glutGet( GLUT_WINDOW_WIDTH ), glutGet( GLUT_WINDOW_HEIGHT ) );
-}
+} // bsluga klawiszy z biblioteki GLUT
 
 void Menu( int value )
 {
@@ -274,7 +293,7 @@ void Menu( int value )
     case EXIT:
         exit( 0 );
     }
-}
+} // menu
 
 int main( int argc, char * argv[] )
 { // wyszukaæ zrodlo bugow
@@ -288,7 +307,10 @@ int main( int argc, char * argv[] )
     glutSpecialFunc(SpecialKeys);
     glutCreateMenu( Menu );
     glutTimerFunc(1000/ANIM_FPS, ZegarFun, 0);
-    //setupScene();
+    //setupScene(); //UWAGA!!! Bug!!! jak sie odkomentuje to zamiast ustawionego oswietlenia wszystko robi sie czarne
+    // szukaj zakomentowanych funkcji w Display()
+
+
     glutMainLoop();
     return 0;
 }
