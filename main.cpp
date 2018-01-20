@@ -78,8 +78,8 @@ void setupScene(void) {
 
 void randFood()
 {
-    foodx = (-31 + rand()%60)*0.1;
-    foodz = (-21 + rand()%20)*0.1;
+    foodx = (-30 + rand()%60)*0.1;
+    foodz = (-20 + rand()%20)*0.1;
 }
 
 void drawPoint(double x, double z, double red, double green, double blue) {
