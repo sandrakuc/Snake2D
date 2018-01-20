@@ -46,9 +46,6 @@ ifstream ifile; // pliki do zapisywania wyniku gry
 GLdouble foodx = 1.0;
 GLdouble foodz = -1.0; // wspolrzedne zarelka
 
-GLdouble snakex = 0.5;
-GLdouble snakez = -0.5; // wspolrzedne lba
-
 GLdouble eyex = 0;
 GLdouble eyey = 3.2;
 GLdouble eyez = 0.7; // polozenie obserwatora
@@ -142,11 +139,8 @@ void Display() //wyswietlenie sceny
     glPopMatrix(); //koniec macierz
 
     cout<<"foodx: "<<foodx<<" foodz: "<<foodz<<endl;
-    cout<<"snakex: "<<snakex<<" snakez: "<<snakez<<endl;
-    if(areSame(snakex, foodx) && areSame(snakez, foodz)){ //kolizja z jedzeniem. UWAGA!!! Tu jest bug!!!
-        points++;
-        randFood();
-    }
+
+    /* ==== TOMEK: to trzeba przenieść do snakeEngine, jak i zliczanie punktów
 
     if((snakex <= -3.1 || snakex >= 3) || (snakez <= -2 || snakez >= 0)){
         ofile.open("score.dat",std::ios::trunc);
@@ -161,7 +155,7 @@ void Display() //wyswietlenie sceny
         MessageBox(NULL,tekst,"Game Over",0);
         Menu(EXIT);
     } //kolizja z krawedziami, zapisywanie wynikow do pliku, gameover
-
+    */
     glPushMatrix();
         glColor3f(1,0,0);
         glBegin(GL_POLYGON);
@@ -202,8 +196,6 @@ void Display() //wyswietlenie sceny
     }
 
     snakeEngine.move();
-
-    drawPoint(snakex, snakez, 0,0,1); //narysowanie glowy weza
 
     //glDisable( GL_LIGHTING );
     //glDisable( GL_COLOR_MATERIAL );
