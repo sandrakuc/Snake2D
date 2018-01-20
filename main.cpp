@@ -18,6 +18,7 @@ Lista zadan:
 #include <fstream>
 #include <windows.h>
 #include <tgmath.h>
+#include "SnakeEngine.h"
 
 #define ANIM_FPS	40 //liczba klatek
 
@@ -34,6 +35,8 @@ bool areSame(double a, double b)
 {
     return fabs(a - b) < 0.01;
 }
+
+SnakeEngine snakeEngine;
 
 int Aspect = FULL_WINDOW;
 
@@ -81,6 +84,43 @@ void randFood()
 {
     foodx = (-31 + rand()%60)*0.1;
     foodz = (-21 + rand()%20)*0.1;
+}
+
+void drawPoint(double x, double z, double red, double green, double blue) {
+    glPushMatrix();
+        glColor3f(red,green,blue);
+        glBegin(GL_POLYGON);
+            glVertex3f( x, 0.0, z );
+            glVertex3f( x, 0.0, z-0.1 );
+            glVertex3f( x+0.1, 0.0, z-0.1);
+            glVertex3f( x+0.1, 0.0, z);
+
+            glVertex3f( x, 0.1, z );
+            glVertex3f( x, 0.1, z-0.1 );
+            glVertex3f( x+0.1, 0.1, z-0.1);
+            glVertex3f( x+0.1, 0.1, z);
+
+            glVertex3f( x, 0.0, z );
+            glVertex3f( x, 0.0, z-0.1 );
+            glVertex3f( x, 0.1, z -0.1);
+            glVertex3f( x, 0.1, z);
+
+            glVertex3f( x, 0.0, z );
+            glVertex3f( x, 0.1, z );
+            glVertex3f( x+0.1, 0.1, z);
+            glVertex3f( x+0.1, 0.0, z);
+
+            glVertex3f( x+0.1, 0.1, z );
+            glVertex3f( x+0.1, 0.1, z-0.1 );
+            glVertex3f( x+0.1, 0.0, z-0.1);
+            glVertex3f( x+0.1, 0.0, z);
+
+            glVertex3f( x, 0.1, z-0.1 );
+            glVertex3f( x, 0.1, z-0.1 );
+            glVertex3f( x+0.1, 0.0, z-0.1);
+            glVertex3f( x+0.1, 0.0, z-0.1);
+        glEnd();
+    glPopMatrix();
 }
 
 void Display() //wyswietlenie sceny
@@ -177,41 +217,12 @@ void Display() //wyswietlenie sceny
         glEnd();
     glPopMatrix(); //narysowanie zarelka
 
+    for(Point p : snakeEngine.getSnakePoints()) {
 
-    glPushMatrix();
-        glColor3f(0,0,1);
-        glBegin(GL_POLYGON);
-            glVertex3f( snakex, 0.0, snakez );
-            glVertex3f( snakex, 0.0, snakez-0.1 );
-            glVertex3f( snakex+0.1, 0.0, snakez-0.1);
-            glVertex3f( snakex+0.1, 0.0, snakez);
+        drawPoint(p.getConvertedX(), p.getConvertedZ(), 1,0,1); //narysowanie glowy weza
+    }
 
-            glVertex3f( snakex, 0.1, snakez );
-            glVertex3f( snakex, 0.1, snakez-0.1 );
-            glVertex3f( snakex+0.1, 0.1, snakez-0.1);
-            glVertex3f( snakex+0.1, 0.1, snakez);
-
-            glVertex3f( snakex, 0.0, snakez );
-            glVertex3f( snakex, 0.0, snakez-0.1 );
-            glVertex3f( snakex, 0.1, snakez -0.1);
-            glVertex3f( snakex, 0.1, snakez);
-
-            glVertex3f( snakex, 0.0, snakez );
-            glVertex3f( snakex, 0.1, snakez );
-            glVertex3f( snakex+0.1, 0.1, snakez);
-            glVertex3f( snakex+0.1, 0.0, snakez);
-
-            glVertex3f( snakex+0.1, 0.1, snakez );
-            glVertex3f( snakex+0.1, 0.1, snakez-0.1 );
-            glVertex3f( snakex+0.1, 0.0, snakez-0.1);
-            glVertex3f( snakex+0.1, 0.0, snakez);
-
-            glVertex3f( snakex, 0.1, snakez-0.1 );
-            glVertex3f( snakex, 0.1, snakez-0.1 );
-            glVertex3f( snakex+0.1, 0.0, snakez-0.1);
-            glVertex3f( snakex+0.1, 0.0, snakez-0.1);
-        glEnd();
-    glPopMatrix(); //narysowanie glowy weza
+    drawPoint(snakex, snakez, 0,0,1); //narysowanie glowy weza
 
     //glDisable( GL_LIGHTING );
     //glDisable( GL_COLOR_MATERIAL );
@@ -310,7 +321,11 @@ void Menu( int value )
 } // menu
 
 int main( int argc, char * argv[] )
-{ // wyszukaæ zrodlo bugow
+{
+    snakeEngine = SnakeEngine();
+
+
+     // wyszukaæ zrodlo bugow
     glutInit( & argc, argv );
     glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGB );
     glutInitWindowSize( 400, 400 );
@@ -326,6 +341,7 @@ int main( int argc, char * argv[] )
 
 
     glutMainLoop();
+
     return 0;
 }
 
