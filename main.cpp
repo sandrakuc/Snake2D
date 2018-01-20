@@ -157,11 +157,12 @@ void Display() //wyswietlenie sceny
     //rysowanie jedzonka
     drawPoint(snakeEngine.food.getConvertedX(), snakeEngine.food.getConvertedZ(), 1,0,0); //narysowanie glowy weza
 
+    //rysowanie wonsza
     for(Point p : snakeEngine.getSnakePoints()) {
         drawPoint(p.getConvertedX(), p.getConvertedZ(), 1,0,1); //narysowanie glowy weza
     }
 
-    snakeEngine.move();
+    snakeEngine.tick();
 
     //glDisable( GL_LIGHTING );
     //glDisable( GL_COLOR_MATERIAL );
