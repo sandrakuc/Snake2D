@@ -4,7 +4,7 @@ using namespace std;
 
 SnakeEngine::SnakeEngine()
 {
-    food = Point(5,5);
+    food = Point(50,10);
 
     direction = SnakeEngine::RIGHT;
     head.x = 10;
@@ -14,11 +14,18 @@ SnakeEngine::SnakeEngine()
     tail.push_back(Point(10,12));
 
 }
-void SnakeEngine::move()
-{
-    int lastX = head.x;
-    int lastY = head.y;
 
+void SnakeEngine::tick()
+{
+    bool checkAppleResult = checkApple();
+
+    if(!checkAppleResult) {
+        move();
+    }
+}
+
+void SnakeEngine::moveHead()
+{
     if(direction == LEFT) {
         head.x--;
     }
@@ -31,6 +38,15 @@ void SnakeEngine::move()
     if(direction == DOWN) {
         head.y++;
     }
+
+}
+
+void SnakeEngine::move()
+{
+    int lastX = head.x;
+    int lastY = head.y;
+
+    moveHead();
 
 
     int tmpX;
@@ -49,6 +65,20 @@ void SnakeEngine::move()
 
     }
 
+}
+
+bool SnakeEngine::checkApple() {
+    if(head.x == food.x && head.y == food.y) {
+
+        //porusza siê sama g³owa, a na jej miejsce wstawiamy nowy element
+        tail.push_front( Point(head.x, head.y) );
+        moveHead();
+
+
+        //@todo punkty
+        return true;
+    }
+    return false;
 }
 
 void SnakeEngine::setDirection(Direction dir)
