@@ -73,7 +73,6 @@ void setupScene(void) {
 	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 } // funkcja odpowiedzialna za ustawienie swiatla
 
-
 void drawPoint(double x, double z, double red, double green, double blue) {
     glPushMatrix();
         glColor3f(red,green,blue);
