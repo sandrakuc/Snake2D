@@ -1,6 +1,11 @@
 #include "SnakeEngine.h"
+#include <time.h>
+#include <stdlib.h>
 
 using namespace std;
+
+#define WIDTH 60
+#define HEIGHT 20
 
 SnakeEngine::SnakeEngine()
 {
@@ -74,7 +79,7 @@ bool SnakeEngine::checkApple() {
         tail.push_front( Point(head.x, head.y) );
         moveHead();
 
-
+        randFood();
         //@todo punkty
         return true;
     }
@@ -98,6 +103,11 @@ list<Point> SnakeEngine::getSnakePoints() {
     return ret;
 }
 
+void SnakeEngine::randFood()
+{
+    food.x = rand()%(WIDTH+1);
+    food.y = rand()%(HEIGHT+1);
+}
 
 
 SnakeEngine::~SnakeEngine()

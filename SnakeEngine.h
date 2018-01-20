@@ -27,6 +27,8 @@ class SnakeEngine
         void setDirection(Direction dir);
         Point food;
     protected:
+
+    private:
         Point head;
         enum Direction direction;
         list<Point> tail;
@@ -37,8 +39,7 @@ class SnakeEngine
         */
         void move();
         void moveHead();
-
-    private:
+        void randFood();
 };
 
 #endif // SNAKEENGINE_H

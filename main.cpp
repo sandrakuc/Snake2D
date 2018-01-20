@@ -73,14 +73,7 @@ void setupScene(void) {
 	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 } // funkcja odpowiedzialna za ustawienie swiatla
 
-/* == tomek: do przeniesienia do snakeEngine
-void randFood()
-{
-    foodx = (-31 + rand()%60)*0.1;
-    foodz = (-21 + rand()%20)*0.1;
-}
 
-*/
 void drawPoint(double x, double z, double red, double green, double blue) {
     glPushMatrix();
         glColor3f(red,green,blue);
