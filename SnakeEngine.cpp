@@ -4,6 +4,8 @@ using namespace std;
 
 SnakeEngine::SnakeEngine()
 {
+    food = Point(5,5);
+
     direction = SnakeEngine::RIGHT;
     head.x = 10;
     head.y = 10;
