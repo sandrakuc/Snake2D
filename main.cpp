@@ -48,7 +48,6 @@ GLdouble foodz = -1.0; // wspolrzedne zarelka
 
 GLdouble snakex = 0.5;
 GLdouble snakez = -0.5; // wspolrzedne lba
-GLint snakeDirection = 3; // kierunek poruszania sie Snake'a
 
 GLdouble eyex = 0;
 GLdouble eyey = 3.2;
@@ -142,25 +141,6 @@ void Display() //wyswietlenie sceny
         glEnd(); //koniec
     glPopMatrix(); //koniec macierz
 
-   switch(snakeDirection){
-    case 0:{
-        snakez-=0.1;
-        break;
-    }
-    case 1:{
-        snakex+=0.1;
-        break;
-    }
-    case 2:{
-        snakez+=0.1;
-        break;
-    }
-    case 3:{
-        snakex-=0.1;
-        break;
-    }
-    } //sterowanie poruszaniem sie Snake'a - kierunki
-
     cout<<"foodx: "<<foodx<<" foodz: "<<foodz<<endl;
     cout<<"snakex: "<<snakex<<" snakez: "<<snakez<<endl;
     if(areSame(snakex, foodx) && areSame(snakez, foodz)){ //kolizja z jedzeniem. UWAGA!!! Tu jest bug!!!
@@ -221,8 +201,8 @@ void Display() //wyswietlenie sceny
         drawPoint(p.getConvertedX(), p.getConvertedZ(), 1,0,1); //narysowanie glowy weza
     }
 
-
     snakeEngine.move();
+
     drawPoint(snakex, snakez, 0,0,1); //narysowanie glowy weza
 
     //glDisable( GL_LIGHTING );
@@ -266,13 +246,14 @@ void Keyboard( unsigned char key, int x, int y )
     if( key == '-' )
          eyez += 0.1;
     if(key == 'w' || key == 'W')
-        snakeDirection = 0;
+        snakeEngine.setDirection(SnakeEngine::UP);
     if(key == 'd' || key == 'D')
-        snakeDirection = 1;
+        snakeEngine.setDirection(SnakeEngine::RIGHT);
     if(key == 's' || key == 'S')
-        snakeDirection = 2;
+        snakeEngine.setDirection(SnakeEngine::DOWN);
     if(key == 'a' || key == 'A')
-        snakeDirection = 3;
+        snakeEngine.setDirection(SnakeEngine::LEFT);
+
     Reshape( glutGet( GLUT_WINDOW_WIDTH ), glutGet( GLUT_WINDOW_HEIGHT ) );
 }
 // obsluha klawiatury

@@ -34,7 +34,7 @@ void SnakeEngine::move()
     int tmpX;
     int tmpY;
 
-    for(Point p : tail) {
+    for(Point& p : tail) {
 
         tmpX = p.x;
         tmpY = p.y;
@@ -47,6 +47,11 @@ void SnakeEngine::move()
 
     }
 
+}
+
+void SnakeEngine::setDirection(Direction dir)
+{
+    this->direction = dir;
 }
 
 

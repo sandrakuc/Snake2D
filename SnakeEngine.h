@@ -23,6 +23,9 @@ class SnakeEngine
 
         void move();
 
+
+        void setDirection(Direction dir);
+
     protected:
         Point head;
         enum Direction direction;
