@@ -218,10 +218,11 @@ void Display() //wyswietlenie sceny
     glPopMatrix(); //narysowanie zarelka
 
     for(Point p : snakeEngine.getSnakePoints()) {
-
         drawPoint(p.getConvertedX(), p.getConvertedZ(), 1,0,1); //narysowanie glowy weza
     }
 
+
+    snakeEngine.move();
     drawPoint(snakex, snakez, 0,0,1); //narysowanie glowy weza
 
     //glDisable( GL_LIGHTING );

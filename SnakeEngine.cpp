@@ -4,7 +4,7 @@ using namespace std;
 
 SnakeEngine::SnakeEngine()
 {
-    direction = SnakeEngine::DOWN;
+    direction = SnakeEngine::RIGHT;
     head.x = 10;
     head.y = 10;
 
@@ -12,6 +12,43 @@ SnakeEngine::SnakeEngine()
     tail.push_back(Point(10,12));
 
 }
+void SnakeEngine::move()
+{
+    int lastX = head.x;
+    int lastY = head.y;
+
+    if(direction == LEFT) {
+        head.x--;
+    }
+    if(direction == RIGHT) {
+        head.x++;
+    }
+    if(direction == UP) {
+        head.y--;
+    }
+    if(direction == DOWN) {
+        head.y++;
+    }
+
+
+    int tmpX;
+    int tmpY;
+
+    for(Point p : tail) {
+
+        tmpX = p.x;
+        tmpY = p.y;
+
+        p.setX(lastX);
+        p.setY(lastY);
+
+        lastX = tmpX;
+        lastY = tmpY;
+
+    }
+
+}
+
 
 list<Point> SnakeEngine::getSnakePoints() {
     list<Point> ret;
@@ -23,6 +60,8 @@ list<Point> SnakeEngine::getSnakePoints() {
 
     return ret;
 }
+
+
 
 SnakeEngine::~SnakeEngine()
 {

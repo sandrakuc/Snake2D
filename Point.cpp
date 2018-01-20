@@ -11,6 +11,16 @@ Point::Point(int xParam, int yParam)
     y = yParam;
 }
 
+void Point::setX(int xParam)
+{
+    this->x = xParam;
+}
+
+void Point::setY(int yParam)
+{
+    this->y = yParam;
+}
+
 double Point::getConvertedX()
 {
     return x*0.1-3;

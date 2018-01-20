@@ -10,8 +10,13 @@ class Point
         virtual ~Point();
         int x;
         int y;
+
+        void setX(int xParam);
+        void setY(int yParam);
         double getConvertedX();
         double getConvertedZ();
+
+
     protected:
 
     private:

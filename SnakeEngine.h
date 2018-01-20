@@ -20,6 +20,9 @@ class SnakeEngine
         SnakeEngine();
         virtual ~SnakeEngine();
         list<Point> getSnakePoints();
+
+        void move();
+
     protected:
         Point head;
         enum Direction direction;
