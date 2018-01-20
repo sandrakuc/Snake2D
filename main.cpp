@@ -44,14 +44,14 @@ ofstream ofile;
 ifstream ifile; // pliki do zapisywania wyniku gry
 
 GLdouble eyex = 0;
-GLdouble eyey = 3.2;
-GLdouble eyez = 0.7; // polozenie obserwatora
+GLdouble eyey = 5;
+GLdouble eyez = 0.3; // polozenie obserwatora
 
 GLint points = 0; // punkty
 
 GLdouble centerx = 0;
 GLdouble centery = 0;
-GLdouble centerz = -10; // punkt, w kierunku ktorego obserwator jest zwrocony
+GLdouble centerz = -11; // punkt, w kierunku ktorego obserwator jest zwrocony
 
 GLfloat lightAmb[] = {0, 0, 0, 1};
 GLfloat lightDif[] = {1, 1, 1, 1};
