@@ -25,11 +25,13 @@ class SnakeEngine
 
 
         void setDirection(Direction dir);
-
+        Point food;
     protected:
         Point head;
         enum Direction direction;
         list<Point> tail;
+
+
     private:
 };
 

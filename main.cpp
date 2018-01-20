@@ -43,9 +43,6 @@ int Aspect = FULL_WINDOW;
 ofstream ofile;
 ifstream ifile; // pliki do zapisywania wyniku gry
 
-GLdouble foodx = 1.0;
-GLdouble foodz = -1.0; // wspolrzedne zarelka
-
 GLdouble eyex = 0;
 GLdouble eyey = 3.2;
 GLdouble eyez = 0.7; // polozenie obserwatora
@@ -76,12 +73,14 @@ void setupScene(void) {
 	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 } // funkcja odpowiedzialna za ustawienie swiatla
 
+/* == tomek: do przeniesienia do snakeEngine
 void randFood()
 {
     foodx = (-30 + rand()%60)*0.1;
     foodz = (-20 + rand()%20)*0.1;
 }
 
+*/
 void drawPoint(double x, double z, double red, double green, double blue) {
     glPushMatrix();
         glColor3f(red,green,blue);
@@ -138,8 +137,6 @@ void Display() //wyswietlenie sceny
         glEnd(); //koniec
     glPopMatrix(); //koniec macierz
 
-    cout<<"foodx: "<<foodx<<" foodz: "<<foodz<<endl;
-
     /* ==== TOMEK: to trzeba przenieść do snakeEngine, jak i zliczanie punktów
 
     if((snakex <= -3.1 || snakex >= 3) || (snakez <= -2 || snakez >= 0)){
@@ -156,40 +153,9 @@ void Display() //wyswietlenie sceny
         Menu(EXIT);
     } //kolizja z krawedziami, zapisywanie wynikow do pliku, gameover
     */
-    glPushMatrix();
-        glColor3f(1,0,0);
-        glBegin(GL_POLYGON);
-            glVertex3f( foodx, 0.0, foodz );
-            glVertex3f( foodx, 0.0, foodz-0.1 );
-            glVertex3f( foodx+0.1, 0.0, foodz-0.1);
-            glVertex3f( foodx+0.1, 0.0, foodz);
 
-            glVertex3f( foodx, 0.1, foodz );
-            glVertex3f( foodx, 0.1, foodz-0.1 );
-            glVertex3f( foodx+0.1, 0.1, foodz-0.1);
-            glVertex3f( foodx+0.1, 0.1, foodz);
-
-            glVertex3f( foodx, 0.0, foodz );
-            glVertex3f( foodx, 0.0, foodz-0.1 );
-            glVertex3f( foodx, 0.1, foodz -0.1);
-            glVertex3f( foodx, 0.1, foodz);
-
-            glVertex3f( foodx, 0.0, foodz );
-            glVertex3f( foodx, 0.1, foodz );
-            glVertex3f( foodx+0.1, 0.1, foodz);
-            glVertex3f( foodx+0.1, 0.0, foodz);
-
-            glVertex3f( foodx+0.1, 0.1, foodz );
-            glVertex3f( foodx+0.1, 0.1, foodz-0.1 );
-            glVertex3f( foodx+0.1, 0.0, foodz-0.1);
-            glVertex3f( foodx+0.1, 0.0, foodz);
-
-            glVertex3f( foodx, 0.1, foodz-0.1 );
-            glVertex3f( foodx, 0.1, foodz-0.1 );
-            glVertex3f( foodx+0.1, 0.0, foodz-0.1);
-            glVertex3f( foodx+0.1, 0.0, foodz-0.1);
-        glEnd();
-    glPopMatrix(); //narysowanie zarelka
+    //rysowanie jedzonka
+    drawPoint(snakeEngine.food.getConvertedX(), snakeEngine.food.getConvertedZ(), 1,0,0); //narysowanie glowy weza
 
     for(Point p : snakeEngine.getSnakePoints()) {
         drawPoint(p.getConvertedX(), p.getConvertedZ(), 1,0,1); //narysowanie glowy weza
