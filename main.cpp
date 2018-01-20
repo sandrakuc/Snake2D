@@ -17,6 +17,7 @@ Lista zadan:
 #include <iostream>
 #include <fstream>
 #include <windows.h>
+#include <tgmath.h>
 
 #define ANIM_FPS	40 //liczba klatek
 
@@ -29,6 +30,10 @@ enum
     EXIT
 }; // do menu
 
+bool areSame(double a, double b)
+{
+    return fabs(a - b) < 0.01;
+}
 
 int Aspect = FULL_WINDOW;
 
@@ -72,6 +77,12 @@ void setupScene(void) {
 	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 } // funkcja odpowiedzialna za ustawienie swiatla
 
+void randFood()
+{
+    foodx = (-31 + rand()%60)*0.1;
+    foodz = (-21 + rand()%20)*0.1;
+}
+
 void Display() //wyswietlenie sceny
 {
     srand(time(NULL)); //losowanie polozenia zarcia
@@ -110,10 +121,11 @@ void Display() //wyswietlenie sceny
     }
     } //sterowanie poruszaniem sie Snake'a - kierunki
 
-    if(snakex == foodx && snakez == foodz){ //kolizja z jedzeniem. UWAGA!!! Tu jest bug!!!
+    cout<<"foodx: "<<foodx<<" foodz: "<<foodz<<endl;
+    cout<<"snakex: "<<snakex<<" snakez: "<<snakez<<endl;
+    if(areSame(snakex, foodx) && areSame(snakez, foodz)){ //kolizja z jedzeniem. UWAGA!!! Tu jest bug!!!
         points++;
-        foodx = (-31 + rand()%60)*0.1;
-        foodz = (-21 + rand()%20)*0.1;
+        randFood();
     }
 
     if((snakex <= -3.1 || snakex >= 3) || (snakez <= -2 || snakez >= 0)){
@@ -207,6 +219,8 @@ void Display() //wyswietlenie sceny
     glutSwapBuffers();
 }
 
+
+
 void ZegarFun(int val) { //funkcja zegarowa dla animacji
     glutPostRedisplay();
 	glutTimerFunc(5000/ANIM_FPS, ZegarFun, 0);
@@ -296,7 +310,7 @@ void Menu( int value )
 } // menu
 
 int main( int argc, char * argv[] )
-{ // wyszukaæ zrodlo bugow
+{ // wyszukaÃ¦ zrodlo bugow
     glutInit( & argc, argv );
     glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGB );
     glutInitWindowSize( 400, 400 );
