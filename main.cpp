@@ -129,9 +129,23 @@ void Display() //wyswietlenie sceny
         glEnd(); //koniec
     glPopMatrix(); //koniec macierz
 
-    /* ==== TOMEK: to trzeba przenieść do snakeEngine, jak i zliczanie punktów
 
-    if((snakex <= -3.1 || snakex >= 3) || (snakez <= -2 || snakez >= 0)){
+
+    //rysowanie snejka
+    for(Point p : snakeEngine.getSnakePoints()) {
+        drawPoint(p.getConvertedX(), p.getConvertedZ(), 1,0,1); //narysowanie glowy weza
+    }
+
+    //rysowanie walla
+    for(Point p : snakeEngine.getWallPoints()) {
+        drawPoint(p.getConvertedX(), p.getConvertedZ(), 1,0,1); //narysowanie glowy weza
+    }
+
+    //rysowanie jedzonka
+    drawPoint(snakeEngine.food.getConvertedX(), snakeEngine.food.getConvertedZ(), 1,0,0); //narysowanie glowy weza
+
+    if(!snakeEngine.tick()) {
+        //zapisywanie wynikow do pliku, gameover
         ofile.open("score.dat",std::ios::trunc);
         ofile<<points<<endl;
         ofile.close();
@@ -143,18 +157,7 @@ void Display() //wyswietlenie sceny
         strcat(tekst,a);
         MessageBox(NULL,tekst,"Game Over",0);
         Menu(EXIT);
-    } //kolizja z krawedziami, zapisywanie wynikow do pliku, gameover
-    */
-
-    //rysowanie jedzonka
-    drawPoint(snakeEngine.food.getConvertedX(), snakeEngine.food.getConvertedZ(), 1,0,0); //narysowanie glowy weza
-
-    //rysowanie wonsza
-    for(Point p : snakeEngine.getSnakePoints()) {
-        drawPoint(p.getConvertedX(), p.getConvertedZ(), 1,0,1); //narysowanie glowy weza
     }
-
-    snakeEngine.tick();
 
     //glDisable( GL_LIGHTING );
     //glDisable( GL_COLOR_MATERIAL );

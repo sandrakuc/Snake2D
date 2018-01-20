@@ -20,8 +20,13 @@ class SnakeEngine
         SnakeEngine();
         virtual ~SnakeEngine();
         list<Point> getSnakePoints();
+        list<Point> getWallPoints();
 
-        void tick();
+        /**
+        * porusza snejkiem o wczesniej zadany kierunek. Jakby jedna klatka fps
+        * @return jeœli false, to koniec gry. gracz wszedl w jakas przeszkode
+        */
+        bool tick();
 
 
         void setDirection(Direction dir);
@@ -32,6 +37,9 @@ class SnakeEngine
         Point head;
         enum Direction direction;
         list<Point> tail;
+
+        list<Point> wall;
+
         bool checkApple();
 
         /**
@@ -40,6 +48,7 @@ class SnakeEngine
         void move();
         void moveHead();
         void randFood();
+        bool checkCollision();
 };
 
 #endif // SNAKEENGINE_H

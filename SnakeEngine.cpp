@@ -18,15 +18,34 @@ SnakeEngine::SnakeEngine()
     tail.push_back(Point(10,11));
     tail.push_back(Point(10,12));
 
+    //generowanie walla
+    for(int i =0; i<HEIGHT; i++) {
+        wall.push_back(Point(0,i));
+    }
+
+    for(int i =0; i<HEIGHT; i++) {
+        wall.push_back(Point(WIDTH,i));
+    }
+
+    for(int i =0; i<WIDTH; i++) {
+        wall.push_back(Point(i,0));
+    }
+
+    for(int i =0; i<=WIDTH; i++) {
+        wall.push_back(Point(i,HEIGHT));
+    }
 }
 
-void SnakeEngine::tick()
+bool SnakeEngine::tick()
 {
+    bool checkCollisionResult = checkCollision();
+
     bool checkAppleResult = checkApple();
 
     if(!checkAppleResult) {
         move();
     }
+    return !checkCollisionResult;
 }
 
 void SnakeEngine::moveHead()
@@ -105,12 +124,36 @@ list<Point> SnakeEngine::getSnakePoints() {
 
 void SnakeEngine::randFood()
 {
-    food.x = rand()%(WIDTH+1);
-    food.y = rand()%(HEIGHT+1);
+    food.x = rand()%(WIDTH-1) +1;
+    food.y = rand()%(HEIGHT-1) +1;
 }
 
+bool SnakeEngine::checkCollision()
+{
+
+    for(Point p : wall) {
+        if(head.x == p.x && head.y == p.y) {
+            return true;
+        }
+    }
+
+    for(Point p : tail) {
+        if(head.x == p.x && head.y == p.y) {
+            return true;
+        }
+    }
+
+
+
+    return false;
+}
+
+list<Point> SnakeEngine::getWallPoints()
+{
+    return wall;
+}
 
 SnakeEngine::~SnakeEngine()
 {
-    //dtor
+
 }
