@@ -47,8 +47,6 @@ GLdouble eyex = 0;
 GLdouble eyey = 5;
 GLdouble eyez = 0.3; // polozenie obserwatora
 
-GLint points = 0; // punkty
-
 GLdouble centerx = 0;
 GLdouble centery = 0;
 GLdouble centerz = -11; // punkt, w kierunku ktorego obserwator jest zwrocony
@@ -147,7 +145,7 @@ void Display() //wyswietlenie sceny
     if(!snakeEngine.tick()) {
         //zapisywanie wynikow do pliku, gameover
         ofile.open("score.dat",std::ios::trunc);
-        ofile<<points<<endl;
+        ofile<<snakeEngine.score<<endl;
         ofile.close();
         ifile.open("score.dat",std::ios::in);
         char a[4];

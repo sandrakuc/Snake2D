@@ -9,6 +9,8 @@ using namespace std;
 
 SnakeEngine::SnakeEngine()
 {
+    score = 0;
+
     food = Point(50,10);
 
     direction = SnakeEngine::RIGHT;
@@ -99,7 +101,9 @@ bool SnakeEngine::checkApple() {
         moveHead();
 
         randFood();
-        //@todo punkty
+
+        score =+ 10;
+
         return true;
     }
     return false;

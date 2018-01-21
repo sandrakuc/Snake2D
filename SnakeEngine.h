@@ -31,6 +31,8 @@ class SnakeEngine
 
         void setDirection(Direction dir);
         Point food;
+
+        int score;
     protected:
 
     private:
