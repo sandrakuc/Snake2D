@@ -102,7 +102,7 @@ bool SnakeEngine::checkApple() {
 
         randFood();
 
-        score =+ 10;
+        score += 10;
 
         return true;
     }
